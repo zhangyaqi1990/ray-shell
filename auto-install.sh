@@ -98,7 +98,7 @@ install_cert() {
     --ecc \
     --fullchain-file "${V2RAY_DIR}/v2ray.crt" \
     --key-file "${V2RAY_DIR}/v2ray.key" \
-    --reloadcmd "systemctl reload nginx && systemctl restart v2ray"
+    --reloadcmd "systemctl is-active --quiet nginx || systemctl start nginx; systemctl restart v2ray"
 }
 
 # ====== Configure v2ray ======
