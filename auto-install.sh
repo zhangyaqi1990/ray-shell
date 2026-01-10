@@ -29,11 +29,12 @@ input_domain() {
   fi
 }
 
-# ====== 1. Wait for domain to resolve ======
+# ====== Wait for domain to resolve ======
 wait_dns() {
-    while ! getent hosts "$DOMAIN" > /dev/null; do
-        sleep 30
-    done
+  log "Wait for domain to resolve"
+  while ! getent hosts "$DOMAIN" > /dev/null; do
+      sleep 30
+  done
 }
 
 # ====== 1. Time check ======
@@ -90,7 +91,8 @@ issue_cert() {
     --issue \
     -d "${DOMAIN}" \
     --standalone \
-    --keylength ec-256
+    --keylength ec-256 \
+    --force
 }
 
 # ====== 8. Install certificate with auto reload ======
