@@ -29,6 +29,13 @@ input_domain() {
   fi
 }
 
+# ====== 1. Wait for domain to resolve ======
+wait_dns() {
+    while ! getent hosts "$DOMAIN" > /dev/null; do
+        sleep 10
+    done
+}
+
 # ====== 1. Time check ======
 check_time() {
   log "Checking system time (time drift should be < 90 seconds)"
@@ -225,6 +232,7 @@ start_nginx() {
 main() {
   check_root
   input_domain
+  wait_dns
   check_time
   install_deps
   stop_nginx
