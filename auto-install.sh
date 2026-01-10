@@ -32,7 +32,7 @@ input_domain() {
 # ====== 1. Wait for domain to resolve ======
 wait_dns() {
     while ! getent hosts "$DOMAIN" > /dev/null; do
-        sleep 10
+        sleep 30
     done
 }
 
