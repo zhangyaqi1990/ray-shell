@@ -33,8 +33,10 @@ input_domain() {
 wait_dns() {
   log "Wait for domain to resolve"
   while ! getent hosts "$DOMAIN" > /dev/null; do
+      log "Waiting for DNS resolution of $DOMAIN..."
       sleep 30
   done
+  log "Domain $DOMAIN resolved successfully"
 }
 
 # ====== 1. Time check ======
@@ -212,6 +214,9 @@ EOF
 )
 
   VMESS_BASE64=$(echo -n "${VMESS_JSON}" | base64 -w 0)
+  
+  # 保存到当前目录的文件
+  echo "vmess://${VMESS_BASE64}" > "./vmess_config.txt"
 
   echo "========== Client Information =========="
   echo "Address : ${DOMAIN}"
@@ -222,8 +227,9 @@ EOF
   echo "vmess link:"
   echo "vmess://${VMESS_BASE64}"
   echo "========================================"
+  echo ""
+  echo "Config saved to: ./vmess_config.txt"
 }
-
 # ====== Start nginx ======
 start_nginx() {
   log "Starting nginx"
