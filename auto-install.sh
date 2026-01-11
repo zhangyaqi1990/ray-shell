@@ -31,12 +31,15 @@ input_domain() {
 
 # ====== Wait for domain to resolve ======
 wait_dns() {
-  log "Wait for domain to resolve"
+  log "Waiting for domain $DOMAIN to resolve"
+  
   while ! getent hosts "$DOMAIN" > /dev/null; do
-      log "Waiting for DNS resolution of $DOMAIN..."
+      log "DNS not ready for $DOMAIN, retrying in 30s..."
       sleep 30
   done
-  log "Domain $DOMAIN resolved successfully"
+  
+  DOMAIN_IP=$(getent hosts "$DOMAIN" | awk '{print $1}')
+  log "DNS resolution complete for $DOMAIN -> $DOMAIN_IP"
 }
 
 # ====== 1. Time check ======
@@ -206,7 +209,7 @@ output_client_config() {
   "aid": "0",
   "net": "ws",
   "type": "none",
-  "host": "${DOMAIN}",
+  "host": "${DOMAIN_IP}",
   "path": "/latest-po",
   "tls": "tls"
 }
@@ -219,7 +222,7 @@ EOF
   echo "vmess://${VMESS_BASE64}" > "./vmess_config.txt"
 
   echo "========== Client Information =========="
-  echo "Address : ${DOMAIN}"
+  echo "Address : ${DOMAIN_IP}"
   echo "Port    : 443"
   echo "UUID    : ${UUID}"
   echo "Path    : /latest-po"
