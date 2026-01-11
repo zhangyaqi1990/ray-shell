@@ -203,13 +203,13 @@ output_client_config() {
 {
   "v": "2",
   "ps": "${DOMAIN}",
-  "add": "${DOMAIN}",
+  "add": "${DOMAIN_IP}",
   "port": "443",
   "id": "${UUID}",
   "aid": "0",
   "net": "ws",
   "type": "none",
-  "host": "${DOMAIN_IP}",
+  "host": "${DOMAIN}",
   "path": "/latest-po",
   "tls": "tls"
 }
