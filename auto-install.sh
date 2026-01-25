@@ -235,8 +235,8 @@ EOF
 }
 # ====== Start nginx ======
 start_nginx() {
-  log "Starting nginx"
-  systemctl start nginx
+  log "Ensuring nginx is running (will restart if already active)"
+  systemctl is-active --quiet nginx && systemctl restart nginx || systemctl start nginx
 }
 
 # ====== Main flow ======
