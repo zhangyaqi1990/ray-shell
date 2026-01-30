@@ -20,6 +20,12 @@ check_root() {
   fi
 }
 
+enable_bbr() {
+  echo "net.core.default_qdisc=fq" | tee -a /etc/sysctl.conf >/dev/null
+  echo "net.ipv4.tcp_congestion_control=bbr" | tee -a /etc/sysctl.conf >/dev/null
+  sysctl -p
+}
+
 # ====== Interactive input ======
 input_domain() {
   read -rp "Enter your domain name (already pointing to this server IP): " DOMAIN
@@ -242,6 +248,7 @@ start_nginx() {
 # ====== Main flow ======
 main() {
   check_root
+  enable_bbr
   input_domain
   wait_dns
   check_time
